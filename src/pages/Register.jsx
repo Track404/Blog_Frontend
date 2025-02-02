@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-
+import { LinearProgress } from '@mui/material';
 import LoadingScreen from '../components/LoadingScreen';
 import image from '../assets/image.png';
 function Register() {
@@ -137,7 +137,12 @@ function Register() {
           <Link to="/">Go to Homepage</Link>
           <Link to="/login">Log In</Link>
           <div>
-            {message && <p style={{ color: 'green' }}>{message}</p>}
+            {message && (
+              <>
+                <p style={{ color: 'green' }}>{message}</p>
+                <LinearProgress />
+              </>
+            )}
 
             {error.length > 0 && (
               <ul style={{ color: 'red', listStyle: 'none' }}>
