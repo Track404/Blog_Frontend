@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { LinearProgress } from '@mui/material';
+import { Alert } from '@mui/material';
+
 import LoadingScreen from '../components/LoadingScreen';
 import image from '../assets/image.png';
 function Register() {
@@ -11,10 +12,12 @@ function Register() {
     password: '',
     confirmPassword: '',
   });
+
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [shouldSubmit, setShouldSubmit] = useState(false);
+
   const url = `http://localhost:3000/user`;
   const navigate = useNavigate();
   const handleSubmit = (e) => {
@@ -110,6 +113,9 @@ function Register() {
                   id="password"
                   name="password"
                   type="password"
+                  placeholder="password"
+                  minLength="1"
+                  maxLength="20"
                   value={data.password}
                   onChange={(e) =>
                     setData({ ...data, password: e.target.value })
@@ -122,6 +128,7 @@ function Register() {
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
+                  placeholder="confirmPassword"
                   type="password"
                   value={data.confirmPassword}
                   onChange={(e) =>
@@ -139,8 +146,9 @@ function Register() {
           <div>
             {message && (
               <>
-                <p style={{ color: 'green' }}>{message}</p>
-                <LinearProgress />
+                <Alert variant="filled" severity="success">
+                  Confirm creation
+                </Alert>
               </>
             )}
 

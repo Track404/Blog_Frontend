@@ -1,12 +1,63 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import image from '../assets/image.png';
+import { useNavigate } from 'react-router-dom';
 function Login() {
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [error, setError] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [shouldSubmit, setShouldSubmit] = useState(false);
+
+  const url = `http://localhost:3000/login`;
+  const navigate = useNavigate();
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setError([]);
+    setMessage('');
+    setLoading(true);
+    setShouldSubmit(true);
+  };
+
   useEffect(() => {
-    fetch('http://localhost:3000/user', { mode: 'cors' })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  }, []);
+    if (!shouldSubmit) return;
+
+    setLoading(true);
+    fetch(url, {
+      mode: 'cors',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((err) => {
+            throw new Error(err.message || 'Login failed');
+          });
+        }
+        return response.json();
+      })
+      .then((resData) => {
+        if (resData.token) {
+          localStorage.setItem('token', resData.token);
+          setMessage('Login successful!');
+          setTimeout(() => navigate('/blog'), 2000);
+        } else {
+          throw new Error(resData.message || 'Login failed');
+        }
+      })
+      .catch((error) => {
+        setError([error.message || 'Something went wrong. Please try again.']);
+      })
+      .finally(() => {
+        setLoading(false);
+        setShouldSubmit(false);
+      });
+  }, [shouldSubmit, url, navigate, data]);
   return (
     <>
       <div className="container">
@@ -15,7 +66,7 @@ function Login() {
             <h2>Log In to BlogApi</h2>
           </div>
           <div>
-            <form id="registerForm" action="/users">
+            <form id="registerForm" action="/login" onSubmit={handleLogin}>
               <div>
                 <label htmlFor="email">Email</label>
                 <input
@@ -23,20 +74,43 @@ function Login() {
                   name="email"
                   placeholder="email"
                   type="email"
+                  value={data.email}
+                  onChange={(e) => setData({ ...data, email: e.target.value })}
                   required
                 />
               </div>
               <div>
                 <label htmlFor="password">Password</label>
-                <input id="password" name="password" type="password" required />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="password"
+                  value={data.password}
+                  onChange={(e) =>
+                    setData({ ...data, password: e.target.value })
+                  }
+                  required
+                />
               </div>
 
-              <button>Sign Up</button>
+              <button type="submit" disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
+              </button>
             </form>
           </div>
           <Link to="/">Go to Homepage</Link>
           <Link to="/register">Sign Up</Link>
+          {message && <p style={{ color: 'green' }}>{message}</p>}
+          {error.length > 0 && (
+            <ul style={{ color: 'red' }}>
+              {error.map((err, index) => (
+                <li key={index}>{err}</li>
+              ))}
+            </ul>
+          )}
         </div>
+
         <div className="leftPage">
           <img src={image} alt="image" id="registerImg" />
         </div>

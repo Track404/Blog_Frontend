@@ -1,9 +1,11 @@
+import ProtectedRoute from '../components/ProtectedRoute';
+
 function Blog() {
   return (
     <>
-      <div>
+      <ProtectedRoute>
         <h1>You sucessfully in the blog</h1>
-      </div>
+      </ProtectedRoute>
     </>
   );
 }
