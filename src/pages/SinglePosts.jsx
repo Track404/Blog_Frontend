@@ -1,15 +1,18 @@
 import ProtectedRoute from '../components/ProtectedRoute';
-import styles from './Blog.module.css';
-import { Link } from 'react-router-dom';
+
 import { useState, useEffect } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import { Button } from '@mui/material';
-function Blog() {
-  const [error, setError] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState([]);
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+function Posts() {
+  const { id } = useParams();
 
-  const url = `http://localhost:3000/posts`;
+  const [loading, setLoading] = useState(false);
+  const [post, setPost] = useState(null); // Store the fetched post data
+  const [error, setError] = useState(null);
+
+  const url = `http://localhost:3000/posts/${id}`;
 
   useEffect(() => {
     fetch(url, {
@@ -25,7 +28,7 @@ function Blog() {
         return response.json();
       })
       .then((response) => {
-        setMessage(response.posts);
+        setPost(response.post);
       })
       .catch((error) => {
         setError([error.message || 'Something went wrong. Please try again.']);
@@ -43,31 +46,24 @@ function Blog() {
   return (
     <>
       <ProtectedRoute>
-        <h1>You sucessfully in the blog</h1>
-        {message && (
-          <ul>
-            {message.map((msg, index) => (
-              <li key={index}>
-                {msg.title}{' '}
-                <Button>
-                  <Link key={msg.id} to={`/posts/${msg.id}`}>
-                    Show
-                  </Link>
-                </Button>
-              </li>
-            ))}
-          </ul>
+        <h1>You sucessfully in the Posts {id}</h1>
+        {post && (
+          <>
+            <div>
+              <h1>{post.title}</h1>
+              <p>{post.content}</p>
+            </div>
+
+            <Button>
+              <Link to={`/blog`}>Go back to Menu</Link>
+            </Button>
+          </>
         )}
-        {error.length > 0 && (
-          <ul style={{ color: 'red' }}>
-            {error.map((err, index) => (
-              <li key={index}>{err}</li>
-            ))}
-          </ul>
-        )}
+
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </ProtectedRoute>
     </>
   );
 }
 
-export default Blog;
+export default Posts;

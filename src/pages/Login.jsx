@@ -33,7 +33,7 @@ function Login() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           return response.json().then((err) => {
             throw new Error(err.message || 'Login failed');
