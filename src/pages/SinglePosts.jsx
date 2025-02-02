@@ -5,6 +5,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import Comments from '../components/Comments';
 function Posts() {
   const { id } = useParams();
 
@@ -43,6 +44,7 @@ function Posts() {
         <LoadingScreen />
       </>
     );
+
   return (
     <>
       <ProtectedRoute>
@@ -53,7 +55,7 @@ function Posts() {
               <h1>{post.title}</h1>
               <p>{post.content}</p>
             </div>
-
+            <Comments comments={post.Comments} paramsId={id} />
             <Button>
               <Link to={`/blog`}>Go back to Menu</Link>
             </Button>
