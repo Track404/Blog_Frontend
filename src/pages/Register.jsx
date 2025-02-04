@@ -18,7 +18,7 @@ function Register() {
   const [message, setMessage] = useState(null);
   const [shouldSubmit, setShouldSubmit] = useState(false);
 
-  const url = `http://localhost:3000/user`;
+  const url = `https://charismatic-learning-production.up.railway.app/user`;
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();

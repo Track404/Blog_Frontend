@@ -15,7 +15,7 @@ function Comments({ comments, paramsId }) {
   const [message, setMessage] = useState(null);
   const [shouldSubmit, setShouldSubmit] = useState(false);
   const navigate = useNavigate();
-  const url = `http://localhost:3000/comments`;
+  const url = `https://charismatic-learning-production.up.railway.app/comments`;
 
   const handleSubmit = (e) => {
     e.preventDefault();

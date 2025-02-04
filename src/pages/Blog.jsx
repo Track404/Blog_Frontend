@@ -1,5 +1,5 @@
 import ProtectedRoute from '../components/ProtectedRoute';
-import styles from './Blog.module.css';
+import './Blog.module.css';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
@@ -9,7 +9,7 @@ function Blog() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState([]);
 
-  const url = `http://localhost:3000/posts`;
+  const url = `https://charismatic-learning-production.up.railway.app/posts`;
 
   useEffect(() => {
     fetch(url, {
